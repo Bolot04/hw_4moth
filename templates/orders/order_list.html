@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% for order in orders %}
+<div class="card" style="width: 18rem;">
+    {% if order.photo %}
+    <img src="{{order.photo.url}}" class="card-img-top" alt="...">
+    {% else %}
+    <img src="/static/null_image2.png" class="card-img-top" alt="...">
+    {% endif %}
+    <div class="card-body">
+        <h5 class="card-title">name: {{order.name}}</h5>
+        <p class="card-text">price: {{order.price}}</p>
+        <a href="/orders/{{order.id}}/" class="btn btn-primary">Принять</a>
+    </div>
+</div>
+{% endfor %}
+{% endblock content %}

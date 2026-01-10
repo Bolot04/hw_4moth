@@ -1,0 +1,20 @@
+# Virtual environment
+C:\Users\user\Desktop\Frilans\Hw60_2\.venv
+
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# SQLite database
+db.sqlite3
+
+# Media files uploaded by users
+media/
+
+# IDE settings
+.vscode/
+.idea/
+
+.gitignore
