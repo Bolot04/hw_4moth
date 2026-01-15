@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render
 
@@ -26,12 +27,12 @@ insert into product (name, description, price) values ('name', 'description', 10
 # PATCH - для обновления частичных данных
 # DELETE - для удаления
 
-
+@login_required(login_url="/login/")
 def home(request):
     if request.method == "GET":
         return render(request, "base.html")
 
-
+@login_required(login_url="/login/")
 def orders_list(request):
     if request.method == "GET":
         orders = Order.objects.all()
@@ -39,7 +40,7 @@ def orders_list(request):
             request, "orders/order_list.html", context={"orders": orders}
         )
 
-
+@login_required(login_url="/login/")
 def orders_detail(request, order_id):
     if request.method == "GET":
         order = Order.objects.filter(id=order_id).first()
@@ -47,7 +48,7 @@ def orders_detail(request, order_id):
             request, "orders/orders_detail.html", context={"order": order}
         )
 
-
+@login_required(login_url="/login/")
 def order_create_view(request):
     if request.method == "GET":
         form = OrderFrom()
