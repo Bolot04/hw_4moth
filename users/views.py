@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 
-@login_required(login_url="/login/")
+
 def register_view(request):
     if request.method == "GET":
         forms = RegisterForm()
@@ -23,17 +23,18 @@ def register_view(request):
         return HttpResponse("Invalid from")
 
 
-@login_required(login_url="/login/")
+
 def login_view(request):
     if request.method == "GET":
-        forms = LoginForm
+        forms = LoginForm()
         return render(request, "users/login.html", context={"form": forms})
     elif request.method == "POST":
         forms = LoginForm(request.POST)
         if forms.is_valid():
             user = authenticate(
-                **forms.cleaned_data
-                )
+                username=forms.cleaned_data["username"],
+                password=forms.cleaned_data["password"]
+           )
             login(request, user)
             return HttpResponse("User logged in")
 

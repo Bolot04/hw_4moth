@@ -1,8 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render
-
-from .form import OrderFrom
+from django.db.models import Q
+from .form import OrderFrom, SearchForm
 from .models import Order
 
 # Create your views here.
@@ -27,17 +27,35 @@ insert into product (name, description, price) values ('name', 'description', 10
 # PATCH - для обновления частичных данных
 # DELETE - для удаления
 
-@login_required(login_url="/login/")
+
 def home(request):
     if request.method == "GET":
         return render(request, "base.html")
 
 @login_required(login_url="/login/")
 def orders_list(request):
+    orders = Order.objects.all()
     if request.method == "GET":
-        orders = Order.objects.all()
+        limit = 3
+        forms = SearchForm()
+        search = request.GET.get("search")
+        category = request.GET.get("category")
+        tags = request.GET.getlist("tags")
+        ordering = request.GET.get("ordering")
+        page = request.GET.get("page") if request.GET.get("page") else 1
+        if category:
+            orders = orders.filter(category=category)
+        if search:
+            orders = orders.filter(Q(name__icontains=search) | Q(description__icontains=search)) 
+        if tags:
+            orders = orders.filter(tag__in=tags)
+        if ordering:
+            orders = orders.order_by(ordering)
+        max_page = range(orders.count() // limit + 1)
+        if page:
+            orders = orders[limit * (int(page) - 1) : limit * int(page)]
         return render(
-            request, "orders/order_list.html", context={"orders": orders}
+            request, "orders/order_list.html", context={"orders": orders, "form": forms, "max_page": max_page[1:]}
         )
 
 @login_required(login_url="/login/")
