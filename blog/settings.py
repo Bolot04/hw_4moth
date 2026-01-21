@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ["*"]
 INSTALLED_APPS = [
     "users",
     "product",
+    "jazzmin",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -125,3 +126,9 @@ MEDIA_URL = "/media/"
 LOGIN_URL = "/login/"
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/login/"
+
+
+JAZZMIN_UI_TWEAKS = {
+    "theme": "darkly",
+    # "dark_mode_theme": "darkly",
+}

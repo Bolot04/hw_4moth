@@ -1,9 +1,9 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.db.models import Q
-from .form import OrderFrom, SearchForm
-from .models import Order
+from .form import OrderFrom, SearchForm, CommentForm
+from .models import Order, Comment
 
 # Create your views here.
 
@@ -62,9 +62,31 @@ def orders_list(request):
 def orders_detail(request, order_id):
     if request.method == "GET":
         order = Order.objects.filter(id=order_id).first()
+        order.views += 1
+        order.save()
+        forms = CommentForm()
+        comments = Comment.objects.filter(order_id=order_id)
+        comment_count = comments.count()
+        average = sum([Comment.rate for comment in comments]) / comment_count 
         return render(
-            request, "orders/orders_detail.html", context={"order": order}
+            request, "orders/order_detail.html", 
+            context={
+                "order": order,
+                "form": forms,
+                "comments":comments,
+                "average": int(average)
+                }
         )
+    elif request.method == "POST":
+        forms = CommentForm(request.POST)
+        if forms.is_valid():
+            Comment.objects.create(
+                text=forms.cleaned_data["text"],
+                order_id=order_id,
+                author=request.user,
+                rate=forms.cleaned_data["rate"],
+            )
+            return redirect(f"/orders/{order_id}")
 
 @login_required(login_url="/login/")
 def order_create_view(request):

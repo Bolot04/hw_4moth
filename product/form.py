@@ -25,3 +25,7 @@ class SearchForm(forms.Form):
     
     # random = forms.MultipleChoiceField(choices=random_list, required=False)
 
+class CommentForm(forms.Form):
+    rate_choise = [(1, "1"), (2, "2"), (3, "3"), (4, "4"), (5, "5")]
+    text = forms.CharField(max_length=1000)
+    rate = forms.ChoiceField(choices=rate_choise)

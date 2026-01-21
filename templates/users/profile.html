@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block contet %}
+<div>
+    {{% if user.profile.photo %}}
+    <img src="{{user.profile.photo.url}}" class="card-img-top" alt="">
+    {% else %}
+    <img src="/static/null_image2.png" class="card-img-top" alt="...">
+    {% endif %}
+    <h1>Username: {{user.username}}</h1>
+    <h1>Email: {{user.email}}</h1>
+    <h1>Age: {{user.profile.age}}</h1>
+</div>
+
+{% endblock content %}

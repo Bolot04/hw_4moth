@@ -9,8 +9,28 @@
     {% endif %}
     <div class="card-body">
         <h5 class="card-title">name: {{order.name}}</h5>
+        <p class="card-title">description: {{order.description}}</p>
         <p class="card-text">price: {{order.price}}</p>
+        <p>views: {{product.views}}</p>
         <a href="/orders/{{order.id}}/" class="btn btn-primary">Принять</a>
+        
     </div>
 </div>
+<form method="POST" action="" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Leave Feedback</button>
+</form>
+
+{% for comment in comments %}
+<div class="card" style="width: 18rem;">
+    <div class="card-body">
+        <p class="card-text">text: {{comment.text}}</p>
+        <p>author: {{comment.author.username}}</p>
+        <p>rate: {{comment.rate}}</p>
+        <p>average: {average}</p>
+    </div>
+
+</div>
+{% endfor %}
 {% endblock content %}
